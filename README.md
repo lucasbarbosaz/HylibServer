@@ -6,19 +6,12 @@ Backend created for HylibCMS in NodeJS
 - [Git](https://git-scm.com/)
 - [NodeJS](https://nodejs.org/) >= 16.x
 
-If you want use yarn, you need:
-- [Yarn](https://yarnpkg.com/)
-
 ### How to install
 
 Open you bash and use npm install or yarn install to install the packages
 
 ```bash
 npm install
-```
-OR
-```bash
-yarn install
 ```
 
 
