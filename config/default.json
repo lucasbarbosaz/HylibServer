@@ -1,0 +1,38 @@
+{
+    "cms_config": {
+        "hotelName": "Lella Hotel",
+        "maintenance": false,
+        "maintenanceMinimumRankLogin": 3,
+        "hallMaximumRank": 5,
+        "staffVerifiedAccountMinimumRank": 4,
+        "staffCheckHkMinimumRank": 3,
+        "staffFeedMinimumRank": 8,
+        "avatarImage": "https://habbo.city/habbo-imaging/avatarimage",
+        "badgeURL": "http://localhost/swf/c_images/album1584/",
+        "loginSettings": {
+            "doubleAuthenticationEnabled": true,
+            "doubleAuthenticationMinRank": 6,
+            "doubleAuthenticationExpireMinutes": 5
+        },
+
+        "registerSettings": {
+            "registerEnable": true,
+            "avatarM": "hd-208-2.sh-290-64.lg-285-82.ch-250-64.hr-165-45",
+            "avatarF": "hr-515-33.lg-716-66-62.sh-735-68.hd-600-1.ch-635-70",
+            "maxAccountsPerIp": 50,
+            "startMotto": "Bem-vindo(a)!",
+            "credits": 9999999,
+            "duckets": 0,
+            "diamonds": 0
+        },
+
+        "configSendmail": {
+            "mailServerHost": "smtp.gmail.com",
+            "mailServerPort": "587"
+        },
+
+        "hCaptcha": {
+            "enabled": true
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "hylib-backend",
+  "version": "1.0.0",
+  "description": "Backend reescrito utilizando NodeJS para a HylibCMS",
+  "main": "src/index.js",
+  "scripts": {
+    "start:dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Laxus",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "hcaptcha": "^0.1.1",
+    "jsonwebtoken": "^9.0.0",
+    "mariadb": "^3.0.2",
+    "moment": "^2.29.4",
+    "mysql2": "^2.3.3",
+    "request-ip": "^3.3.0",
+    "sequelize": "^6.28.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
