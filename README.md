@@ -18,7 +18,8 @@ npm install
 ### How to configure
 
 - `config/default.json` has all hotel settings
-- `/.env` put data from your database and other settings
+- `src/config/auth.json` to generate the JWT type tokens
+- `/.env` put data from your database and other settings:
 
 ```
 PORT=3333 //port on which the server will listen `localhost:PORT`
