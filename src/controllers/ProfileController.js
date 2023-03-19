@@ -86,7 +86,7 @@ module.exports = {
                     /* ==================================================================================================================== */
 
 
-                    res.status(200).json({profile: profileArrCount});
+                    res.status(200).json({ profile: profileArrCount });
 
                 } else {
                     return res.status(200).json({
@@ -125,7 +125,7 @@ module.exports = {
                     let userId = string.replace(/[^0-9]*/g, '');
 
                     const user = await functions.getUserFromId(parseInt(userId));
-                    const userSettings = await PlayerModel.findByPk(parseInt(userId), { 
+                    const userSettings = await PlayerModel.findByPk(parseInt(userId), {
                         include: { association: 'getSettingsUser' }
                     });
 
@@ -136,9 +136,9 @@ module.exports = {
                     if (relationsShips.length > 0) {
                         for (var i = 0; i < relationsShips.length; i++) {
                             const getUsernamePartner = await db.query("SELECT username,figure FROM players WHERE id = ?", {
-                                replacements: [ relationsShips[i].partner ], type: sequelize.QueryTypes.SELECT
+                                replacements: [relationsShips[i].partner], type: sequelize.QueryTypes.SELECT
                             });
-    
+
                             for (var p = 0; p < getUsernamePartner.length; p++) {
                                 userRelationsShips.push({
                                     type: relationsShips[i].level,
@@ -228,7 +228,7 @@ module.exports = {
         try {
             const { username } = req.query;
 
-            var badgesUsed = [];
+            const consultShowedBadges = [];
 
             if (username && username.length > 0) {
                 const getUserIdFromUsername = await db.query("SELECT id FROM players WHERE username = ? LIMIT 1", {
@@ -241,46 +241,17 @@ module.exports = {
                     let userId = string.replace(/[^0-9]*/g, '');
 
 
-                    const consultShowedBadges1 = await db.query("SELECT badge_code FROM player_badges WHERE player_id = ? AND slot != 0 LIMIT 0,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultShowedBadges2 = await db.query("SELECT badge_code FROM player_badges WHERE player_id = ? AND slot != 0 LIMIT 1,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultShowedBadges3 = await db.query("SELECT badge_code FROM player_badges WHERE player_id = ? AND slot != 0 LIMIT 2,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultShowedBadges4 = await db.query("SELECT badge_code FROM player_badges WHERE player_id = ? AND slot != 0 LIMIT 3,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultShowedBadges5 = await db.query("SELECT badge_code FROM player_badges WHERE player_id = ? AND slot != 0 LIMIT 4,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    for (var s = 0; s < consultShowedBadges1.length; s++) {
-                        badgesUsed.push(consultShowedBadges1[s])
+                    for (let i = 0; i < 5; i++) {
+                        const badge = await db.query("SELECT badge_code FROM player_badges WHERE player_id = ? AND slot != 0 LIMIT ?,1", {
+                            replacements: [userId, i],
+                            type: sequelize.QueryTypes.SELECT
+                        });
+                        if (badge.length > 0) {
+                            consultShowedBadges.push({
+                                badge_code: badge[0].badge_code
+                            });
+                        }
                     }
-
-                    for (var s = 0; s < consultShowedBadges2.length; s++) {
-                        badgesUsed.push(consultShowedBadges2[s])
-                    }
-
-                    for (var s = 0; s < consultShowedBadges3.length; s++) {
-                        badgesUsed.push(consultShowedBadges3[s])
-                    }
-
-                    for (var s = 0; s < consultShowedBadges4.length; s++) {
-                        badgesUsed.push(consultShowedBadges4[s])
-                    }
-
-                    for (var s = 0; s < consultShowedBadges5.length; s++) {
-                        badgesUsed.push(consultShowedBadges5[s])
-                    }
-
                 } else {
                     return res.status(200).json({
                         error: true,
@@ -296,7 +267,7 @@ module.exports = {
                 });
             }
 
-            res.status(200).json(badgesUsed);
+            res.status(200).json(consultShowedBadges);
         } catch (error) {
             return res.status(500).json({ error });
         }
@@ -401,7 +372,7 @@ module.exports = {
         try {
             const { username } = req.query;
 
-            var groups = [];
+            const groups = [];
 
             if (username && username.length > 0) {
                 const getUserIdFromUsername = await db.query("SELECT id FROM players WHERE username = ? LIMIT 1", {
@@ -414,90 +385,27 @@ module.exports = {
                     let userId = string.replace(/[^0-9]*/g, '');
 
 
-                    const consultProfileGroups1 = await db.query("SELECT group_id FROM group_memberships WHERE player_id = ? LIMIT 0,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultProfileGroups2 = await db.query("SELECT group_id FROM group_memberships WHERE player_id = ? LIMIT 1,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultProfileGroups3 = await db.query("SELECT group_id FROM group_memberships WHERE player_id = ? LIMIT 2,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultProfileGroups4 = await db.query("SELECT group_id FROM group_memberships WHERE player_id = ? LIMIT 3,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    const consultProfileGroups5 = await db.query("SELECT group_id FROM group_memberships WHERE player_id = ? LIMIT 4,1", {
-                        replacements: [userId], type: sequelize.QueryTypes.SELECT
-                    });
-
-                    for (var g = 0; g < consultProfileGroups1.length; g++) {
-                        const consultGroupInfo = await db.query("SELECT name,badge FROM groups WHERE id = ?", {
-                            replacements: [consultProfileGroups1[g].group_id], type: sequelize.QueryTypes.SELECT
+                    const groupIds = [1, 2, 3, 4, 5];
+                    
+                    for (let i = 0; i < groupIds.length; i++) {
+                      const consultProfileGroups = await db.query("SELECT group_id FROM group_memberships WHERE player_id = ? LIMIT ?, 1", {
+                        replacements: [userId, i], type: sequelize.QueryTypes.SELECT
+                      });
+                    
+                      for (let j = 0; j < consultProfileGroups.length; j++) {
+                        const consultGroupInfo = await db.query("SELECT name, badge FROM groups WHERE id = ?", {
+                          replacements: [consultProfileGroups[j].group_id], type: sequelize.QueryTypes.SELECT
                         });
-
-                        for (var c = 0; c < consultGroupInfo.length; c++) {
-                            groups.push({
-                                groupName: consultGroupInfo[c].name,
-                                groupBadge: consultGroupInfo[c].badge,
-                            })
+                    
+                        for (let k = 0; k < consultGroupInfo.length; k++) {
+                          groups.push({
+                            groupName: consultGroupInfo[k].name,
+                            groupBadge: consultGroupInfo[k].badge,
+                          })
                         }
+                      }
                     }
 
-                    for (var g = 0; g < consultProfileGroups2.length; g++) {
-                        const consultGroupInfo = await db.query("SELECT name,badge FROM groups WHERE id = ?", {
-                            replacements: [consultProfileGroups1[g].group_id], type: sequelize.QueryTypes.SELECT
-                        });
-
-                        for (var c = 0; c < consultGroupInfo.length; c++) {
-                            groups.push({
-                                groupName: consultGroupInfo[c].name,
-                                groupBadge: consultGroupInfo[c].badge,
-                            })
-                        }
-                    }
-
-                    for (var g = 0; g < consultProfileGroups3.length; g++) {
-                        const consultGroupInfo = await db.query("SELECT name,badge FROM groups WHERE id = ?", {
-                            replacements: [consultProfileGroups1[g].group_id], type: sequelize.QueryTypes.SELECT
-                        });
-
-                        for (var c = 0; c < consultGroupInfo.length; c++) {
-                            groups.push({
-                                groupName: consultGroupInfo[c].name,
-                                groupBadge: consultGroupInfo[c].badge,
-                            })
-                        }
-                    }
-
-                    for (var g = 0; g < consultProfileGroups4.length; g++) {
-                        const consultGroupInfo = await db.query("SELECT name,badge FROM groups WHERE id = ?", {
-                            replacements: [consultProfileGroups1[g].group_id], type: sequelize.QueryTypes.SELECT
-                        });
-
-                        for (var c = 0; c < consultGroupInfo.length; c++) {
-                            groups.push({
-                                groupName: consultGroupInfo[c].name,
-                                groupBadge: consultGroupInfo[c].badge,
-                            })
-                        }
-                    }
-
-                    for (var g = 0; g < consultProfileGroups5.length; g++) {
-                        const consultGroupInfo = await db.query("SELECT name,badge FROM groups WHERE id = ?", {
-                            replacements: [consultProfileGroups1[g].group_id], type: sequelize.QueryTypes.SELECT
-                        });
-
-                        for (var c = 0; c < consultGroupInfo.length; c++) {
-                            groups.push({
-                                groupName: consultGroupInfo[c].name,
-                                groupBadge: consultGroupInfo[c].badge,
-                            })
-                        }
-                    }
                 } else {
                     return res.status(200).json({
                         error: true,
