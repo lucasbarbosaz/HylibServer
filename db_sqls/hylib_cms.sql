@@ -12,6 +12,20 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Copiando estrutura para tabela lella_cms.cms_login_pin
+CREATE TABLE IF NOT EXISTS `cms_login_pin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `player_id` int(11) NOT NULL,
+  `access_code` varchar(255) NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  `reg_ip` varchar(120) NOT NULL,
+  `last_ip` varchar(120) DEFAULT NULL,
+  `enabled` enum('0','1') CHARACTER SET utf8 DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4150 DEFAULT CHARSET=latin1;
+
+-- Exportação de dados foi desmarcado.
+
 -- Copiando estrutura para tabela lella_cms.cms_news
 CREATE TABLE IF NOT EXISTS `cms_news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -66,6 +80,37 @@ CREATE TABLE IF NOT EXISTS `cms_post_reaction` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela lella_cms.cms_reset_password
+CREATE TABLE IF NOT EXISTS `cms_reset_password` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `player_id` int(11) NOT NULL,
+  `reset_key` varchar(255) NOT NULL,
+  `reg_ip` varchar(120) NOT NULL,
+  `last_ip` varchar(120) DEFAULT NULL,
+  `timestamp` int(11) NOT NULL,
+  `enabled` enum('0','1') DEFAULT '0',
+  `staff_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela lella_cms.cms_shop
+CREATE TABLE IF NOT EXISTS `cms_shop` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page` enum('vip','stars','packages','diamonds','duckets') NOT NULL,
+  `product_id` text NOT NULL,
+  `precos` text NOT NULL,
+  `precos_pt` text NOT NULL,
+  `beneficios` text DEFAULT NULL,
+  `active` enum('1','0') DEFAULT '1',
+  `hex_div` varchar(50) DEFAULT '#4e4e4e',
+  `link` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 ALTER TABLE `player_settings`
 	ADD COLUMN `profile_picture` VARCHAR(255) NULL DEFAULT NULL AFTER `allow_sex`;

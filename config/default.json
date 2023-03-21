@@ -1,5 +1,6 @@
 {
     "cms_config": {
+        "link": "http://localhost",
         "hotelName": "Lella Hotel",
         "maintenance": false,
         "maintenanceMinimumRankLogin": 3,

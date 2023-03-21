@@ -32,6 +32,8 @@ class players extends Model {
 
     static associate(models) {
         this.hasMany(models.player_settings, { foreignKey: 'player_id', as: 'getSettingsUser' });
+        this.hasMany(models.cms_reset_password, { foreignKey: 'player_id', as: 'getResetPasswordData' });
+        this.hasMany(models.cms_login_pin, { foreignKey: 'player_id', as: 'getPins' });
     } 
 }
 

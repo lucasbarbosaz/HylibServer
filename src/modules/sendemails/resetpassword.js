@@ -7,16 +7,16 @@ const config = require('config');
 require('dotenv').config();
 
 module.exports = {
-    async sendEmail(email, subject, username, code) {
-        const filePath = path.join(__dirname, '../view/templates/loginPinTemplate.html');
+    async sendEmail(email, subject, username, hotelname, keylink) {
+        const filePath = path.join(__dirname, '../../view/templates/resetpassword.html');
         const source = fs.readFileSync(filePath, 'utf-8').toString();
 
         const template = handlebars.compile(source);
 
         const replacements = {
             username: username,
-            code: code,
-            expire: config.get('cms_config').loginSettings.doubleAuthenticationExpireMinutes
+            hotelname: hotelname,
+            keylink: keylink
         };
 
         const htmlToSend = template(replacements);

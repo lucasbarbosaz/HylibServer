@@ -5,14 +5,18 @@ const Register = require('./models/Register');
 const Articles = require('./models/Articles');
 const GroupMemberships = require('./models/GroupMemberships');
 const PlayerSettings = require('./models/PlayerSettings');
+const ResetPassword = require('./models/ResetPassword');
+const CmsLoginPin = require('./models/CmsLoginPin');
 
 const db = new Sequelize(dbConfig);
 
 Player.init(db);
 Register.init(db);
+CmsLoginPin.init(db);
 Articles.init(db);
 GroupMemberships.init(db);
 PlayerSettings.init(db);
+ResetPassword.init(db);
 
 Player.associate(db.models);
 

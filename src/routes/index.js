@@ -18,6 +18,9 @@ routes.use(cors());
 
 routes.post('/user-register', RegisterController.register);
 routes.post('/login-user', LoginController.login);
+routes.post('/user_login_pin', LoginController.loginPin);
+routes.post('/recovery_account', LoginController.recoverPassword);
+
 routes.post('/check', RegisterController.check);
 routes.post('/look', LoginController.look);
 routes.post('/send_reset_password', RecPasswordController.resetPassword);
