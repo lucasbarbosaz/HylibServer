@@ -1,0 +1,10 @@
+{
+    "playerNotFound": "Este nome de usuário não existe ou está vázio!",
+    "playerWrong": "Usuário ou senha incorretos!",
+    "pinMessage": "Espere 1 minuto antes de fazer login novamente.",
+    "pinSendEmail1": "Código de acesso à sua conta no {{hotelName}}",
+    "banPerman": "Sua conta foi banida permanentemente do Lella pelo motivo: {{reason}}",
+    "banMessage": "Sua conta foi banida até: <b>{{time}}</b> pelo motivo: {{reason}}",
+    "maintenance": "Ops, o {{hotelName}} está em manutenção no momento.",
+    "passwordResetTitle": "Redefinição de Senha"
+}

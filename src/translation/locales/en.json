@@ -1,0 +1,10 @@
+{
+	"playerNotFound": "This username does not exist or is empty!",
+	"playerWrong": "Incorrect username or password!",
+	"pinMessage": "Please wait 1 minute before logging in again.",
+	"pinSendEmail1": "Access code for your account at {{hotelName}}",
+	"banPerman": "Your account has been permanently banned from Lella for the reason: {{reason}}",
+	"banMessage": "Your account has been banned until: <b>{{time}}</b> for the reason: {{reason}}",
+	"maintenance": "Oops, {{hotelName}} is currently under maintenance.",
+	"passwordResetTitle": "Password Reset"
+}

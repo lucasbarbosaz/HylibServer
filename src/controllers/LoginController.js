@@ -14,6 +14,8 @@ const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
 const crypto = require('crypto')
 var mt = require('../modules/mt_rand');
+const i18n = require('../translation/i18n');
+var hotelName = config.get('cms_config').hotelName;
 
 function generateToken(params = {}) {
     return jwt.sign(params, auth.jwt_secret_key, {
@@ -33,19 +35,19 @@ module.exports = {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: 'Este nome de usuário não existe ou está vázio!'
+                    message: i18n.__('playerNotFound')
                 });
             } else if (typeof password === undefined || password.trim() === "" || password === null) {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: 'Usuário ou senha incorretos!'
+                    message: i18n.__('playerWrong')
                 });
             } else if (!bcrypt.compareSync(password, player.password)) {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: 'Usuário ou senha incorretos!'
+                    message: i18n.__('playerWrong')
                 });
             } else {
                 if (config.get('cms_config').loginSettings.doubleAuthenticationEnabled && player.rank >= config.get('cms_config').loginSettings.doubleAuthenticationMinRank && requestIp.getClientIp(req) !== player.ip_last) {
@@ -63,7 +65,7 @@ module.exports = {
                         return res.status(400).json({
                             error: true,
                             status_code: 400,
-                            message: 'Espere 1 minuto antes de fazer login novamente.'
+                            message: i18n.__('pinMessage')
                         });
                     } else {
                         let accessCode = mt(100000, 999999);
@@ -77,7 +79,7 @@ module.exports = {
                         });
 
                         if (insertPinCode) {
-                            sendPinCodeMail.sendEmail(player.email, `Código de acesso à sua conta no ${config.get('cms_config').hotelName}`, player.username, accessCode)
+                            sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName }), player.username, accessCode)
                         }
 
                         return res.status(200).json({
@@ -95,16 +97,19 @@ module.exports = {
                         let timeBan = consultUserBan[0].expire;
 
                         if (timeBan == '0') {
+                            let reason = consultUserBan[0].reason;
                             return res.status(200).json({
                                 error: true,
                                 status_code: 400,
-                                message: 'Sua conta foi banida permanentemente do Lella pelo motivo: ' + consultUserBan[0].reason + ''
+                                message: i18n.__('banPerman', { reason })
                             });
                         } else if (time < timeBan) {
+                            let time = moment.unix(consultUserBan[0].expire).format('YYYY-MM-DD HH:mm:ss');
+                            let reason = consultUserBan[0].reason;
                             return res.status(200).json({
                                 error: true,
                                 status_code: 400,
-                                message: 'Sua conta foi banida até: <b>' + moment.unix(consultUserBan[0].expire).format('YYYY-MM-DD HH:mm:ss') + '</b> pelo motivo: ' + consultUserBan[0].reason + ''
+                                message: i18n.__('banMessage', { time, reason })
                             });
                         } else if (time > timeBan) {
                             const deleteUserBan = await db.query("DELETE FROM bans WHERE data = ?", {
@@ -115,7 +120,7 @@ module.exports = {
                                 return res.status(200).json({
                                     error: true,
                                     status_code: 400,
-                                    message: 'Ops, o ' + config.get('cms_config').hotelName + ' está em manutenção no momento.'
+                                    message: i18n.__('maintenance', config.get('cms_config').hotelName)
                                 });
                             }
 
@@ -186,7 +191,7 @@ module.exports = {
                             return res.status(200).json({
                                 error: true,
                                 status_code: 400,
-                                message: 'Ops, o ' + config.get('cms_config').hotelName + ' está em manutenção no momento.'
+                                message: i18n.__('maintenance', { hotelName })
                             });
                         }
 
