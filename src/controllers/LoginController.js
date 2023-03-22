@@ -15,7 +15,6 @@ const functions = require('../modules/functions');
 const crypto = require('crypto')
 var mt = require('../modules/mt_rand');
 const i18n = require('../translation/i18n');
-var hotelName = config.get('cms_config').hotelName;
 
 function generateToken(params = {}) {
     return jwt.sign(params, auth.jwt_secret_key, {
@@ -65,7 +64,7 @@ module.exports = {
                         return res.status(400).json({
                             error: true,
                             status_code: 400,
-                            message: i18n.__('pinMessage')
+                            message: i18n.__('pinMessage', { hotelName: config.get('cms_config').hotelName })
                         });
                     } else {
                         let accessCode = mt(100000, 999999);
@@ -79,7 +78,7 @@ module.exports = {
                         });
 
                         if (insertPinCode) {
-                            sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName }), player.username, accessCode)
+                            sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName: config.get('cms_config').hotelName }), player.username, accessCode)
                         }
 
                         return res.status(200).json({
@@ -104,12 +103,10 @@ module.exports = {
                                 message: i18n.__('banPerman', { reason })
                             });
                         } else if (time < timeBan) {
-                            let time = moment.unix(consultUserBan[0].expire).format('YYYY-MM-DD HH:mm:ss');
-                            let reason = consultUserBan[0].reason;
                             return res.status(200).json({
                                 error: true,
                                 status_code: 400,
-                                message: i18n.__('banMessage', { time, reason })
+                                message: i18n.__('banMessage', { time: moment.unix(consultUserBan[0].expire).format('YYYY-MM-DD HH:mm:ss'), reason: consultUserBan[0].reason })
                             });
                         } else if (time > timeBan) {
                             const deleteUserBan = await db.query("DELETE FROM bans WHERE data = ?", {
@@ -120,7 +117,7 @@ module.exports = {
                                 return res.status(200).json({
                                     error: true,
                                     status_code: 400,
-                                    message: i18n.__('maintenance', config.get('cms_config').hotelName)
+                                    message: i18n.__('maintenance', { hotelName: config.get('cms_config').hotelName })
                                 });
                             }
 
