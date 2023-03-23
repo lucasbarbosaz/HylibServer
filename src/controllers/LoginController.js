@@ -14,7 +14,10 @@ const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
 const crypto = require('crypto')
 var mt = require('../modules/mt_rand');
+
 const i18n = require('../translation/i18n');
+const uuid = require('uuid');
+const deviceId = uuid.v4();
 
 function generateToken(params = {}) {
     return jwt.sign(params, auth.jwt_secret_key, {
@@ -179,7 +182,8 @@ module.exports = {
                                     })
                                 }
 
-                                const token = generateToken({ id: player.id })
+                                //add user ip in token for future security check
+                                const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req)})
                                 return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });
                             }
                         }
@@ -249,8 +253,8 @@ module.exports = {
                             })
                         }
 
-
-                        const token = generateToken({ id: player.id })
+                        //add user ip in token for future security check
+                        const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req)})
                         return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });
                     }
                 }
@@ -331,7 +335,8 @@ module.exports = {
                             });
                         }
 
-                        const token = generateToken({ id: JSON.stringify(accessCode[0].player_id) })
+                        //add user ip in token for future security check
+                        const token = generateToken({ id: JSON.stringify(accessCode[0].player_id), ip: requestIp.getClientIp(req) })
                         return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });
                     }
                 } else {

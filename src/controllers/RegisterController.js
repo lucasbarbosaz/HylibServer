@@ -252,7 +252,8 @@ module.exports = {
                                     })
                                 }
 
-                                const token = generateToken({ id: addNewUser.id })
+                                //add user ip in token for future security check
+                                const token = generateToken({ id: addNewUser.id, ip: requestIp.getClientIp(req) })
                                 return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });  
                             } else {
                                 return res.status(200).json({
