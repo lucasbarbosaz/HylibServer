@@ -85,8 +85,6 @@ module.exports = {
                                 sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName: config.get('cms_config').hotelName }), player.username, accessCode)
                             }
 
-                            console.log(result.getPins.length);
-
                             return res.status(200).json({
                                 status_code: 204,
                                 action: 'login_pin',
