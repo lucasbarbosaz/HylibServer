@@ -30,6 +30,13 @@ DB_USERNAME=root //mysql username
 DB_PASSWORD= //mysql password
 DB_NAME=lella_cms //name database
 ``` 
+
+### Set your default language in messages
+`config/default.json`
+```
+"defaultLanguage": "en", //options: en,pt,es
+```
+
 ### Development
 To make changes, launch it with developer mode to apply changes after saving.
 ```bash
