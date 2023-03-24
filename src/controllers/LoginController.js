@@ -57,20 +57,44 @@ module.exports = {
                         include: { association: 'getPins', order: [['id', 'DESC']], limit: 1 },
                     });
 
-                    //convert object to int
-                    let string = JSON.stringify(result.getPins[0].timestamp);
-                    let lastAccessCode = string.replace(/[^0-9]*/g, '');
+                    if (result.getPins.length > 0) {
+                        //convert object to int
+                        let string = JSON.stringify(result.getPins[0].timestamp);
+                        let lastAccessCode = string.replace(/[^0-9]*/g, '');
 
-                    let now = moment().unix();
+                        let now = moment().unix();
 
-                    if ((parseInt(lastAccessCode) + (60 * 1)) > now) {
-                        return res.status(400).json({
-                            error: true,
-                            status_code: 400,
-                            message: i18n.__('pinMessage', { hotelName: config.get('cms_config').hotelName })
-                        });
+                        if ((parseInt(lastAccessCode) + (60 * 1)) > now) {
+                            return res.status(400).json({
+                                error: true,
+                                status_code: 400,
+                                message: i18n.__('pinMessage', { hotelName: config.get('cms_config').hotelName })
+                            });
+                        } else {
+                            let accessCode = mt(100000, 999999);
+
+                            const insertPinCode = await LoginPin.create({
+                                player_id: player.id,
+                                access_code: accessCode,
+                                timestamp: now,
+                                reg_ip: requestIp.getClientIp(req),
+                                enabled: '1'
+                            });
+
+                            if (insertPinCode) {
+                                sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName: config.get('cms_config').hotelName }), player.username, accessCode)
+                            }
+
+                            console.log(result.getPins.length);
+
+                            return res.status(200).json({
+                                status_code: 204,
+                                action: 'login_pin',
+                            });
+                        }
                     } else {
                         let accessCode = mt(100000, 999999);
+                        let now = moment().unix();
 
                         const insertPinCode = await LoginPin.create({
                             player_id: player.id,
@@ -183,7 +207,7 @@ module.exports = {
                                 }
 
                                 //add user ip in token for future security check
-                                const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req)})
+                                const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req) })
                                 return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });
                             }
                         }
@@ -254,7 +278,7 @@ module.exports = {
                         }
 
                         //add user ip in token for future security check
-                        const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req)})
+                        const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req) })
                         return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });
                     }
                 }
