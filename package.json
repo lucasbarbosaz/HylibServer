@@ -25,7 +25,8 @@
     "moment": "^2.29.4",
     "mysql2": "^2.3.3",
     "request-ip": "^3.3.0",
-    "sequelize": "^6.28.0"
+    "sequelize": "^6.28.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
