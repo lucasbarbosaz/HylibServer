@@ -9,6 +9,7 @@ const moment = require('moment');
 const requestIp = require('request-ip');
 const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
+const i18n = require('../translation/i18n');
 
 
 module.exports = {
@@ -92,14 +93,14 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 401,
-                        message: "Usuário não encontrado."
+                        message: i18n.__('dataProfileUserNotFound')
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: "Informe o nome do usuário."
+                    message: i18n.__('dataProfileRequiredUser')
                 });
             }
         } catch (error) {
@@ -165,14 +166,14 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 401,
-                        message: "Usuário não encontrado."
+                        message: i18n.__('dataProfileUserNotFound')
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: "Informe o nome do usuário."
+                    message: i18n.__('dataProfileRequiredUser')
                 });
             }
 
@@ -256,14 +257,14 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: "Usuário não encontrado."
+                        message: i18n.__('dataProfileUserNotFound')
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: "Informe o nome do usuário."
+                    message: i18n.__('dataProfileRequiredUser')
                 });
             }
 
@@ -300,14 +301,14 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: "Usuário não encontrado."
+                        message: i18n.__('dataProfileUserNotFound')
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: "Informe o nome do usuário."
+                    message: i18n.__('dataProfileRequiredUser')
                 });
             }
 
@@ -351,14 +352,14 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: "Usuário não encontrado."
+                        message: i18n.__('dataProfileUserNotFound')
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: "Informe o nome do usuário."
+                    message: i18n.__('dataProfileRequiredUser')
                 });
             }
 
@@ -410,14 +411,14 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: "Usuário não encontrado."
+                        message: i18n.__('dataProfileUserNotFound')
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: "Informe o nome do usuário."
+                    message: i18n.__('dataProfileRequiredUser')
                 });
             }
 

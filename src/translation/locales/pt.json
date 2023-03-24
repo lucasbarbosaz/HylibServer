@@ -6,5 +6,92 @@
     "banPerman": "Sua conta foi banida permanentemente do Lella pelo motivo: {{reason}}",
     "banMessage": "Sua conta foi banida até: <b>{{time}}</b> pelo motivo: {{reason}}",
     "maintenance": "Ops, o {{hotelName}} está em manutenção no momento.",
-    "passwordResetTitle": "Redefinição de Senha"
+    "passwordResetTitle": "Redefinição de Senha",
+    "invalidPin": "Este código é inválido ou já expirou.",
+    "requiredPin": "Informe o código de confirmação.",
+
+
+    "checkNameInvalid": "Nome de usuário inválido!",
+    "checkUserTaken": "Nome de usuário em uso!",
+    "checkPrefixBlock": "O prefixo {{prefix}} só pode ser utilizado por STAFFS!",
+    "checkUserValid": "Nome de usuário válido!",
+
+    "checkEmailRequired": "Informe um e-mail.",
+    "checkEmailInvalid": "Informe um e-mail válido.",
+    "checkEmailTaken": "Este e-mail já está em uso.",
+    "checkEmailValid": "E-mail válido!",
+
+    "checkPasswordRequired": "Informe uma senha.",
+    "checkPasswordLength": "A senha deve ter no mínimo 6 caracteres.",
+    "checkPasswordValid": "Senha válida!",
+
+
+    
+    "registerUsernameRequired": "O nome de usuário não pode ficar <b>vázio</b>!",
+    "registerUsernameInvalid": "Nome de usuário inválido. Somente letras, números, pontos, vírgulas, underlines e traços são permitidos.",
+    "registerInvalidName": "Nome de usuário inválido. Deve ter no <b>mínimo 2 e no máximo 20 caracteres</b>",
+    "registerNameTaken": "O usuário <b> {{username}} </b> já está sendo usado!",
+    "registerNamePrefix": "O prefixo <b> {{prefix}} </b> só pode ser utilizado por STAFFS!",
+    "registerEmailRequired": "Você precisa do <b>seu endereço de e-mail</b>!",
+    "registerEmailInvalid": "O <b>endereço de e-mail</b> fornecido é <b>inválido</b>!",
+    "registerEmailTaken": "O <b>endereço de e-mail</b> fornecido já está em uso!",
+    "registerPasswordRequired": "Você precisa fornecer uma <b>senha segura</b> para sua conta!",
+    "registerPasswordLength": "Sua senha deve conter <b>no mínimo 6 caracteres </b>",
+    "registerGenderRequired": "<b>Escolha o seu sexo</b> e, com ele, consiga um parceiro incrível!",
+    "registerCaptchaError": "<b>Verifique se você é um robô</b>!",
+
+
+
+    "recoveryPasswordNeedEmail": "Informe o e-mail que utilizou na conta.",
+    "recoveryPasswordValidEmail": "Informe um e-mail válido.",
+    "recoveryPasswordAwaiting": "Espere 3 minutos antes de solicitar um novo link de redefinição de senha.",
+    "recoveryPasswordSuccess": "Se {{email}} for o e-mail utilizado na conta, um e-mail com um link de redefinição de senha acaba de ser enviado.",
+    "recoveryPasswordError": "Ocorreu um erro ao enviar o e-mail. Por favor contate um Staff.",
+
+
+
+    "recPasswordNotKeyFound": "Não encontramos nenhum registro com essa chave de autenticação.",
+    
+    
+    
+    "resetPasswordKeyNotFound": "A chave de redifinição não foi informada",
+    "resetPasswordPasswordNotFound": "É obrigatório que informe uma senha.",
+    "resetPasswordLength": "Por segurança, a nova senha tem que conter no mínimo 6 caracteres.",
+    "resetPasswordExpired": "Esta chave de redefinição expirou.",
+    "resetPasswordSuccess": "Sua senha foi alterada com sucesso! Você será redirecionado...",
+    "resetPasswordPasswordDifferent": "As novas senhas não são iguais.",
+
+    "dataProfileUserNotFound": "Usuário não encontrado.",
+    "dataProfileRequiredUser": "Informe o nome do usuário.",
+
+    "settingsMottoLength": "A sua missão deve ter no máximo 70 caracteres.",
+    "settingsEmailInvalid": "Informe um e-mail válido.",
+    "settingsEmailRequired": "Informe um e-mail.",
+    "settingsPasswordLength": "Sua nova senha deve ter no mínimo 6 caracteres.",
+    "settingsPasswordWrong": "A senha atual informada está errada.",
+    "settingsPasswordSame": "As novas senhas não são iguais.",
+    "settingsPasswordRepeat": "Por favor, repita sua nova senha.",
+    "settingsPasswordNewRequired": "Informe sua nova senha.",
+    "settingsPasswordRequired": "Informe sua senha atual.",
+
+    "articlesSectionsToday": "Hoje",
+    "articlesSectionsYesterday": "Ontem",
+    "articlesSectionsThisWeek": "Esta semana",
+    "articlesSectionsLastWeek": "Semana passada",
+    "articlesSectionsThisMont": "Esse mês",
+    "articlesSectionsLastMonth": "Último mês",
+    "articlesSectionsOldest": "Antigo",
+
+
+
+    "getNewsInvalidSize": "O valor de {{size}} deve ser um número inteiro.",
+    "getNewsInvalidId": "Forneça um número de id válido.",
+    "getNewsNotFound": "Nenhuma notícia encontrada com o id informado.",
+
+
+
+    "sendCommentWaiting": "Você tem que esperar <b>10 minutos</b> para comentar novamente.",
+    "sendCommentValueUndefined": "Você precisa escrever algo para enviar o comentarário.",
+    "sendCommentLengthMax": "Seu comentário é grande demais.",
+    "sendCommentFilter": "Hmm, parece que encontramos uma palavra na blacklist em seu comentário."
 }

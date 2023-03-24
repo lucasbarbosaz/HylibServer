@@ -365,14 +365,14 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: 'Este código é inválido ou já expirou.'
+                        message: i18n.__('invalidPin')
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: 'Informe o código de confirmação.'
+                    message: i18n.__('requiredPin')
                 });
             }
         } catch (error) {
@@ -388,13 +388,13 @@ module.exports = {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: 'Informe o e-mail que utilizou na conta.'
+                    message: i18n.__('recoveryPasswordNeedEmail')
                 });
             } else if (!functions.validateEmail(email)) {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: 'Informe um e-mail válido.'
+                    message: i18n.__('recoveryPasswordValidEmail')
                 });
             } else {
                 const player = await PlayerModel.findOne(
@@ -415,7 +415,7 @@ module.exports = {
                             return res.status(200).json({
                                 error: true,
                                 status_code: 400,
-                                message: 'Espere 3 minutos antes de solicitar um novo link de redefinição de senha.'
+                                message: i18n.__('recoveryPasswordAwaiting')
                             });
                         } else {
                             let hash = crypto.createHash('sha1').update(JSON.stringify(Math.floor((Math.random() * 10) + 1))).digest('hex');
@@ -433,13 +433,13 @@ module.exports = {
 
                                 return res.status(200).json({
                                     status_code: 200,
-                                    message: 'Se ' + email + ' for o e-mail utilizado na conta, um e-mail com um link de redefinição de senha acaba de ser enviado.',
+                                    message: i18n.__('recoveryPasswordSuccess', { email: email })
                                 });
                             } else {
                                 return res.status(200).json({
                                     error: true,
                                     status_code: 400,
-                                    message: 'Ocorreu um erro ao enviar o e-mail. Por favor contate um Staff.'
+                                    message: i18n.__('recoveryPasswordError')
                                 });
                             }
                         }
@@ -448,7 +448,7 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: 'Ocorreu um erro ao enviar o e-mail. Por favor contate um Staff.'
+                        message: i18n.__('recoveryPasswordError')
                     });
                 }
             }

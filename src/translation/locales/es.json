@@ -1,10 +1,92 @@
 {
     "playerNotFound": "¡Este nombre de usuario no existe o está vacío!",
-    "playerWrong": "¡Usuario o contraseña incorrectos!",
-    "pinMessage": "Espere 1 minuto antes de iniciar sesión de nuevo.",
-    "pinSendEmail1": "Código de acceso a su cuenta en {{hotelName}}",
-    "banPerman": "Su cuenta ha sido baneada permanentemente de Lella por la razón: {{reason}}",
-    "banMessage": "Su cuenta ha sido baneada hasta: <b>{{time}}</b> por la razón: {{reason}}",
-    "maintenance": "Oops, {{hotelName}} está en mantenimiento en este momento.",
-    "passwordResetTitle": "Reinicio de Contraseña"
+    "playerWrong": "¡Nombre de usuario o contraseña incorrecta!",
+    "pinMessage": "Por favor, espere 1 minuto antes de volver a iniciar sesión.",
+    "pinSendEmail1": "Código de acceso a tu cuenta de {{hotelName}}",
+    "banPerman": "Tu cuenta ha sido permanentemente prohibida de Lella por la razón: {{reason}}",
+    "banMessage": "Tu cuenta ha sido baneada hasta: <b>{{time}}</b> por la razón: {{reason}}",
+    "maintenance": "Vaya, {{hotelName}} está actualmente en mantenimiento.",
+    "passwordResetTitle": "Restablecimiento de contraseña",
+    "invalidPin": "Este código es inválido o ya ha expirado.",
+    "requiredPin": "Por favor, ingrese el código de confirmación.",
+
+    "checkNameInvalid": "¡Nombre de usuario inválido!",
+	"checkUserTaken": "¡Nombre de usuario ya en uso!",
+	"checkPrefixBlock": "¡El prefijo {{prefix}} solo puede ser utilizado por el personal!",
+	"checkUserValid": "¡Nombre de usuario válido!",
+
+	"checkEmailRequired": "Ingrese un correo electrónico.",
+	"checkEmailInvalid": "Ingrese un correo electrónico válido.",
+	"checkEmailTaken": "Este correo electrónico ya está en uso.",
+	"checkEmailValid": "¡Correo electrónico válido!",
+
+	"checkPasswordRequired": "Ingrese una contraseña.",
+	"checkPasswordLength": "La contraseña debe tener al menos 6 caracteres.",
+	"checkPasswordValid": "¡Contraseña válida!",
+
+
+	"registerUsernameRequired": "¡El nombre de usuario no puede estar vacío!",
+	"registerUsernameInvalid": "Nombre de usuario inválido. Solo se permiten letras, números, puntos, comas, guiones bajos y guiones.",
+	"registerInvalidName": "Nombre de usuario inválido. Debe tener entre <b>2 y 20 caracteres</b>.",
+	"registerNameTaken": "¡El nombre de usuario <b>{{username}}</b> ya está en uso!",
+	"registerNamePrefix": "¡El prefijo <b>{{prefix}}</b> solo puede ser utilizado por el personal!",
+	"registerEmailRequired": "¡Necesitas proporcionar tu dirección de correo electrónico!",
+	"registerEmailInvalid": "¡La dirección de correo electrónico proporcionada es <b>inválida</b>!",
+	"registerEmailTaken": "¡La dirección de correo electrónico proporcionada ya está en uso!",
+	"registerPasswordRequired": "¡Debes proporcionar una <b>contraseña segura</b> para tu cuenta!",
+	"registerPasswordLength": "Tu contraseña debe tener <b>al menos 6 caracteres</b>.",
+	"registerGenderRequired": "¡Elige tu género y consigue una pareja increíble!",
+	"registerCaptchaError": "<b>¡Verifica que no eres un robot</b>!",
+
+
+
+
+	"recoveryPasswordNeedEmail": "Ingresa el correo electrónico que usaste para tu cuenta.",
+	"recoveryPasswordValidEmail": "Ingresa un correo electrónico válido.",
+	"recoveryPasswordAwaiting": "Por favor, espera 3 minutos antes de solicitar un nuevo enlace de restablecimiento de contraseña.",
+	"recoveryPasswordSuccess": "Si {{email}} es el correo electrónico utilizado para la cuenta, se acaba de enviar un correo electrónico con un enlace para restablecer la contraseña.",
+	"recoveryPasswordError": "Hubo un error al enviar el correo electrónico. Por favor, contacta a un Staff.",
+
+
+
+	"recPasswordNotKeyFound": "No pudimos encontrar ningún registro con esa clave de autenticación.",
+
+
+
+	"resetPasswordKeyNotFound": "La clave de reinicio no fue proporcionada.",
+	"resetPasswordPasswordNotFound": "Debes proporcionar una contraseña.",
+	"resetPasswordLength": "Por razones de seguridad, la nueva contraseña debe tener al menos 6 caracteres.",
+	"resetPasswordExpired": "Esta clave de reinicio ha caducado.",
+	"resetPasswordSuccess": "¡Tu contraseña se ha cambiado correctamente! Serás redirigido...",
+	"resetPasswordPasswordDifferent": "Las nuevas contraseñas no coinciden.",
+
+	"dataProfileUserNotFound": "Usuario no encontrado.",
+	"dataProfileRequiredUser": "Por favor proporciona el nombre del usuario.",
+
+	"settingsMottoLength": "Tu misión debe tener como máximo 70 caracteres.",
+	"settingsEmailInvalid": "Por favor proporciona una dirección de correo electrónico válida.",
+	"settingsEmailRequired": "Por favor proporciona una dirección de correo electrónico.",
+	"settingsPasswordLength": "Tu nueva contraseña debe tener al menos 6 caracteres.",
+	"settingsPasswordWrong": "La contraseña actual proporcionada es incorrecta.",
+	"settingsPasswordSame": "Las nuevas contraseñas no coinciden.",
+	"settingsPasswordRepeat": "Por favor repite tu nueva contraseña.",
+	"settingsPasswordNewRequired": "Por favor proporciona tu nueva contraseña.",
+	"settingsPasswordRequired": "Por favor proporciona tu contraseña actual.",
+
+	"articlesSectionsToday": "Hoy",
+	"articlesSectionsYesterday": "Ayer",
+	"articlesSectionsThisWeek": "Esta semana",
+	"articlesSectionsLastWeek": "La semana pasada",
+	"articlesSectionsThisMont": "Este mes",
+	"articlesSectionsLastMonth": "El mes pasado",
+	"articlesSectionsOldest": "Más antiguo",
+	
+	"getNewsInvalidSize": "El valor de {{size}} debe ser un número entero.",
+	"getNewsInvalidId": "Por favor proporciona un número de id válido.",
+	"getNewsNotFound": "No se encontraron noticias con el id proporcionado.",
+	
+	"sendCommentWaiting": "Tienes que esperar <b>10 minutos</b> para comentar de nuevo.",
+	"sendCommentValueUndefined": "Necesitas escribir algo para enviar el comentario.",
+	"sendCommentLengthMax": "Tu comentario es demasiado largo.",
+	"sendCommentFilter": "Hmm, parece que encontramos una palabra de la lista negra en tu comentario."
 }

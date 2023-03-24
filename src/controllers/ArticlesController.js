@@ -8,6 +8,7 @@ const moment = require('moment');
 const requestIp = require('request-ip');
 const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
+const i18n = require('../translation/i18n');
 
 const ArticlesModel = require('../database/models/Articles');
 
@@ -156,49 +157,49 @@ module.exports = {
             var response = [];
             if (today.length > 0) {
                 response.push({
-                    section: 'Hoje',
+                    section: i18n.__('articlesSectionsToday'),
                     news: today
                 });
             }
 
             if (yesterday.length > 0) {
                 response.push({
-                    section: 'Ontem',
+                    section: i18n.__('articlesSectionsYesterday'),
                     news: yesterday
                 });
             }
 
             if (thisweek.length > 0) {
                 response.push({
-                    section: 'Esta semana',
+                    section: i18n.__('articlesSectionsThisWeek'),
                     news: thisweek
                 });
             }
 
             if (lastweek.length > 0) {
                 response.push({
-                    section: 'Semana passada',
+                    section: i18n.__('articlesSectionsLastWeek'),
                     news: lastweek
                 });
             }
 
             if (thismonth.length > 0) {
                 response.push({
-                    section: 'Esse mês',
+                    section: i18n.__('articlesSectionsThisMont'),
                     news: thismonth
                 });
             }
 
             if (lastmonth.length > 0) {
                 response.push({
-                    section: 'Último mês',
+                    section: i18n.__('articlesSectionsLastMonth'),
                     news: lastmonth
                 });
             }
 
             if (oldest.length > 0) {
                 response.push({
-                    section: 'Antigo',
+                    section: i18n.__('articlesSectionsOldest'),
                     news: oldest
                 });
             }
@@ -221,7 +222,7 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: 'O valor de \'size\' deve ser um número inteiro.'
+                        message: i18n.__('getNewsInvalidSize', { size: size })
                     });
                 }
 
@@ -243,7 +244,7 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: 'Forneça um número de id válido.'
+                        message: i18n.__('getNewsInvalidId')
                     });
                 } else {
 
@@ -268,7 +269,7 @@ module.exports = {
                         return res.status(200).json({
                             error: true,
                             status_code: 404,
-                            message: 'Nenhuma notícia encontrada com o id informado.'
+                            message: i18n.__('getNewsNotFound')
                         });
                     } else {
 
@@ -477,26 +478,26 @@ module.exports = {
                                     return res.status(200).json({
                                         error: true,
                                         status_code: 404,
-                                        message: 'Você tem que esperar <b>10 minutos</b> para comentar novamente.'
+                                        message: i18n.__('sendCommentWaiting')
                                     });
                                 } else {
                                     if (typeof value == undefined || value === "" || value === null) {
                                         return res.status(200).json({
                                             error: true,
                                             status_code: 404,
-                                            message: 'Você precisa escrever algo para enviar o comentarário.'
+                                            message: i18n.__('sendCommentValueUndefined')
                                         });
                                     } else if (value.length > 100) {
                                         return res.status(200).json({
                                             error: true,
                                             status_code: 404,
-                                            message: 'Seu comentário é grande demais.'
+                                            message: i18n.__('sendCommentLengthMax')
                                         });
                                     } else if (filter.values(value) === true) {
                                         return res.status(200).json({
                                             error: true,
                                             status_code: 404,
-                                            message: 'Hmm, parece que encontramos uma palavra na blacklist em seu comentário.'
+                                            message: i18n.__('sendCommentFilter')
                                         });
                                     } else {
                                         const insertComment = await db.query("INSERT INTO cms_post_comments (type, post_id, value, author_id, timestamp) VALUES (?,?,?,?,?)", {
