@@ -131,7 +131,7 @@ ALTER TABLE `player_settings`
 	ADD COLUMN `allow_sex` ENUM('0','1') NULL DEFAULT '1' AFTER `profile_cover`;
 	
 ALTER TABLE `player_settings`
-	ADD COLUMN `disable_whisper` enum('0','1') ENUM('0','1') NULL DEFAULT '1' AFTER `allow_sex`;
+	ADD COLUMN `disable_whisper` ENUM('0','1') NULL DEFAULT '1' AFTER `allow_sex`;
 -- Exportação de dados foi desmarcado.
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
