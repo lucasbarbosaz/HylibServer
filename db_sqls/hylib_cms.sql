@@ -122,10 +122,16 @@ ALTER TABLE `players`
 	ADD COLUMN `account_disabled` enum('0','1') NULL DEFAULT NULL AFTER `ip_reg`;
 	
 ALTER TABLE `player_settings`
-	ADD COLUMN `profile_picture` VARCHAR(255) NULL DEFAULT NULL AFTER `allow_sex`;
+	ADD COLUMN `profile_picture` VARCHAR(255) NULL DEFAULT NULL AFTER `allow_friend_requests`;
 	
 ALTER TABLE `player_settings`
 	ADD COLUMN `profile_cover` VARCHAR(255) NULL DEFAULT NULL AFTER `profile_picture`;
+	
+ALTER TABLE `player_settings`
+	ADD COLUMN `allow_sex` ENUM('0','1') NULL DEFAULT '1' AFTER `profile_cover`;
+	
+ALTER TABLE `player_settings`
+	ADD COLUMN `disable_whisper` enum('0','1') ENUM('0','1') NULL DEFAULT '1' AFTER `allow_sex`;
 -- Exportação de dados foi desmarcado.
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
