@@ -112,6 +112,15 @@ CREATE TABLE IF NOT EXISTS `cms_shop` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
+ALTER TABLE `players`
+	ADD COLUMN `ip_last` VARCHAR(45) NULL DEFAULT NULL AFTER `vip`;
+	
+ALTER TABLE `players`
+	ADD COLUMN `ip_reg` VARCHAR(45) NULL DEFAULT NULL AFTER `ip_last`;
+	
+ALTER TABLE `players`
+	ADD COLUMN `account_disabled` enum('0','1') NULL DEFAULT NULL AFTER `ip_reg`;
+	
 ALTER TABLE `player_settings`
 	ADD COLUMN `profile_picture` VARCHAR(255) NULL DEFAULT NULL AFTER `allow_sex`;
 	
