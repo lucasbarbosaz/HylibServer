@@ -12,7 +12,7 @@
         "avatarImage": "https://habbo.city/habbo-imaging/avatarimage",
         "badgeURL": "http://localhost/swf/c_images/album1584/",
         "loginSettings": {
-            "doubleAuthenticationEnabled": true,
+            "doubleAuthenticationEnabled": false,
             "doubleAuthenticationMinRank": 6,
             "doubleAuthenticationExpireMinutes": 5
         },
