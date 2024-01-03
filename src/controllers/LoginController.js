@@ -14,17 +14,13 @@ const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
 const crypto = require('crypto')
 var mt = require('../modules/mt_rand');
-
 const i18n = require('../translation/i18n');
-const uuid = require('uuid');
-const deviceId = uuid.v4();
 
 function generateToken(params = {}) {
     return jwt.sign(params, auth.jwt_secret_key, {
         expiresIn: '1d' // 1day
     });
 }
-
 module.exports = {
 
     async login(req, res) {
@@ -56,61 +52,62 @@ module.exports = {
                     const result = await PlayerModel.findByPk(player.id, {
                         include: { association: 'getPins', order: [['id', 'DESC']], limit: 1 },
                     });
+					
+					if (result.getPins.length > 0) {
+						//convert object to int
+						let string = JSON.stringify(result.getPins[0].timestamp);
+						let lastAccessCode = string.replace(/[^0-9]*/g, '');
 
-                    if (result.getPins.length > 0) {
-                        //convert object to int
-                        let string = JSON.stringify(result.getPins[0].timestamp);
-                        let lastAccessCode = string.replace(/[^0-9]*/g, '');
+						let now = moment().unix();
 
-                        let now = moment().unix();
+						if ((parseInt(lastAccessCode) + (60 * 1)) > now) {
+							return res.status(400).json({
+								error: true,
+								status_code: 400,
+								message: i18n.__('pinMessage', { hotelName: config.get('cms_config').hotelName })
+							});
+						} else {
+							let accessCode = mt(100000, 999999);
 
-                        if ((parseInt(lastAccessCode) + (60 * 1)) > now) {
-                            return res.status(400).json({
-                                error: true,
-                                status_code: 400,
-                                message: i18n.__('pinMessage', { hotelName: config.get('cms_config').hotelName })
-                            });
-                        } else {
-                            let accessCode = mt(100000, 999999);
+							const insertPinCode = await LoginPin.create({
+								player_id: player.id,
+								access_code: accessCode,
+								timestamp: now,
+								reg_ip: requestIp.getClientIp(req),
+								enabled: '1'
+							});
 
-                            const insertPinCode = await LoginPin.create({
-                                player_id: player.id,
-                                access_code: accessCode,
-                                timestamp: now,
-                                reg_ip: requestIp.getClientIp(req),
-                                enabled: '1'
-                            });
+							if (insertPinCode) {
+								sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName: config.get('cms_config').hotelName }), player.username, accessCode)
+							}
 
-                            if (insertPinCode) {
-                                sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName: config.get('cms_config').hotelName }), player.username, accessCode)
-                            }
+							return res.status(200).json({
+								status_code: 204,
+								action: 'login_pin',
+							});
+						}						
+					} else {
+						let accessCode = mt(100000, 999999);
+						let now = moment().unix();
+						
+						const insertPinCode = await LoginPin.create({
+							player_id: player.id,
+							access_code: accessCode,
+							timestamp: now,
+							reg_ip: requestIp.getClientIp(req),
+							enabled: '1'
+						});
+						
+						if (insertPinCode) {
+							sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName: config.get('cms_config').hotelName }), player.username, accessCode)
+						}
 
-                            return res.status(200).json({
-                                status_code: 204,
-                                action: 'login_pin',
-                            });
-                        }
-                    } else {
-                        let accessCode = mt(100000, 999999);
-                        let now = moment().unix();
+						return res.status(200).json({
+							status_code: 204,
+							action: 'login_pin',
+						});							
+					}
 
-                        const insertPinCode = await LoginPin.create({
-                            player_id: player.id,
-                            access_code: accessCode,
-                            timestamp: now,
-                            reg_ip: requestIp.getClientIp(req),
-                            enabled: '1'
-                        });
-
-                        if (insertPinCode) {
-                            sendPinCodeMail.sendEmail(player.email, i18n.__('pinSendEmail1', { hotelName: config.get('cms_config').hotelName }), player.username, accessCode)
-                        }
-
-                        return res.status(200).json({
-                            status_code: 204,
-                            action: 'login_pin',
-                        });
-                    }
                 } else {
                     const consultUserBan = await db.query("SELECT expire, reason FROM bans WHERE (data = ? OR data = ? OR data = ?)", {
                         replacements: [player.id, player.ip_reg, player.ip_last], type: sequelize.QueryTypes.SELECT
@@ -154,7 +151,7 @@ module.exports = {
                                 });
                             }
 
-                            const user = await db.query("SELECT id,username,motto,figure,last_online,online,rank,vip_points,credits,activity_points,seasonal_points,vip FROM players WHERE id = ?", {
+                            const user = await db.query("SELECT id,username,motto,figure,last_online,online,email,rank,vip_points,credits,activity_points,seasonal_points,vip FROM players WHERE id = ?", {
                                 replacements: [player.id], type: sequelize.QueryTypes.SELECT
                             });
 
@@ -195,6 +192,7 @@ module.exports = {
                                         figure: user[i].figure,
                                         last_online: user[i].last_online,
                                         online: user[i].online == '1',
+                                        email: user[i].email,
                                         diamonds: functions.formatCount(parseInt(user[i].vip_points), true),
                                         credits: functions.formatCount(parseInt(user[i].credits), true),
                                         duckets: functions.formatCount(parseInt(user[i].activity_points), true),
@@ -205,7 +203,7 @@ module.exports = {
                                 }
 
                                 //add user ip in token for future security check
-                                const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req) })
+                                const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req)})
                                 return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });
                             }
                         }
@@ -227,7 +225,7 @@ module.exports = {
                         };
                     }
 
-                    const user = await db.query("SELECT id,username,motto,figure,last_online,online,rank,vip_points,credits,activity_points,seasonal_points,vip FROM players WHERE id = ?", {
+                    const user = await db.query("SELECT id,username,motto,figure,last_online,online,email,rank,vip_points,credits,activity_points,seasonal_points,vip FROM players WHERE id = ?", {
                         replacements: [player.id], type: sequelize.QueryTypes.SELECT
                     });
 
@@ -259,24 +257,26 @@ module.exports = {
                                     }
                                 }
                             }
-                            userArray.push({
-                                id: user[i].id,
-                                username: user[i].username,
-                                motto: user[i].motto,
-                                figure: user[i].figure,
-                                last_online: user[i].last_online,
-                                online: user[i].online == '1',
-                                diamonds: functions.formatCount(parseInt(user[i].vip_points), true),
-                                credits: functions.formatCount(parseInt(user[i].credits), true),
-                                duckets: functions.formatCount(parseInt(user[i].activity_points), true),
-                                seasonal: functions.formatCount(parseInt(user[i].seasonal_points), true),
-                                isVip: user[i].vip == '1' ? true : false,
-                                canOpenAdminpan: user[i].rank >= config.get('cms_config').staffCheckHkMinimumRank ? true : false,
-                            })
+							userArray.push({
+								id: user[i].id,
+								username: user[i].username,
+								motto: user[i].motto,
+								figure: user[i].figure,
+								last_online: user[i].last_online,
+								online: user[i].online == '1',
+								email: user[i].email,
+								diamonds: functions.formatCount(parseInt(user[i].vip_points), true),
+								credits: functions.formatCount(parseInt(user[i].credits), true),
+								duckets: functions.formatCount(parseInt(user[i].activity_points), true),
+								seasonal: functions.formatCount(parseInt(user[i].seasonal_points), true),
+								isVip: user[i].vip == '1' ? true : false,
+								canOpenAdminpan: user[i].rank >= config.get('cms_config').staffCheckHkMinimumRank ? true : false,
+							})
                         }
 
-                        //add user ip in token for future security check
-                        const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req) })
+
+						//add user ip in token for future security check
+						const token = generateToken({ id: player.id, ip: requestIp.getClientIp(req)})
                         return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });
                     }
                 }
@@ -286,25 +286,25 @@ module.exports = {
         }
     },
 
-    async look(req, res) {
-        try {
-            const { identification } = req.body;
+	async look(req, res) {
+		try {
+			const { identification } = req.body;
 
-            if (identification.length < 1 || identification.trim() === "") return;
+			if (identification.length < 1 || identification.trim() === "") return;
 
-            const player = await PlayerModel.findOne({ where: { username: identification } });
+			const player = await PlayerModel.findOne({ where: { username: identification } });
 
-            if (player !== null) {
-                return res.status(200).json({ status_code: 200, look: config.get('cms_config').avatarImage + "?figure=" + player.figure + "&head_direction=3&size=n&gesture=sml" });
-            } else {
-                return res.status(200).json({ status_code: 400 });
-            }
-        } catch (error) {
-            return res.status(500).json({ error });
-        }
-    },
-
-    async loginPin(req, res) {
+			if (player !== null) {
+				return res.status(200).json({ status_code: 200, look: config.get('cms_config').avatarImage + "?figure=" + player.figure + "&head_direction=3&size=n&gesture=sml" });
+			} else {
+				return res.status(200).json({ status_code: 400 });
+			}
+		} catch (error) {
+			return res.status(500).json({ error });
+		}
+	},
+	
+	async loginPin(req, res) {
         try {
             const { access_code } = req.body;
 
@@ -333,7 +333,7 @@ module.exports = {
                     })
 
 
-                    const user = await db.query("SELECT id,username,motto,figure,last_online,online,rank,vip_points,credits,activity_points,seasonal_points FROM players WHERE id = ?", {
+                    const user = await db.query("SELECT id,username,motto,figure,last_online,online,email,rank,vip_points,credits,activity_points,seasonal_points FROM players WHERE id = ?", {
                         replacements: [JSON.stringify(accessCode[0].player_id)], type: sequelize.QueryTypes.SELECT
                     });
 
@@ -341,20 +341,21 @@ module.exports = {
 
                     if (user !== null) {
                         for (var i = 0; i < user.length; i++) {
-                            userArray.push({
-                                id: user[i].id,
-                                username: user[i].username,
-                                motto: user[i].motto,
-                                figure: user[i].figure,
-                                last_online: user[i].last_online,
-                                online: user[i].online == '1',
-                                diamonds: functions.formatCount(parseInt(user[i].vip_points), true),
-                                credits: functions.formatCount(parseInt(user[i].credits), true),
-                                duckets: functions.formatCount(parseInt(user[i].activity_points), true),
-                                seasonal: functions.formatCount(parseInt(user[i].seasonal_points), true),
-                                isVip: user[i].vip == '1' ? true : false,
-                                canOpenAdminpan: user[i].rank >= config.get('cms_config').staffCheckHkMinimumRank ? true : false,
-                            });
+							userArray.push({
+								id: user[i].id,
+								username: user[i].username,
+								motto: user[i].motto,
+								figure: user[i].figure,
+								last_online: user[i].last_online,
+								online: user[i].online == '1',
+								email: user[i].email,
+								diamonds: functions.formatCount(parseInt(user[i].vip_points), true),
+								credits: functions.formatCount(parseInt(user[i].credits), true),
+								duckets: functions.formatCount(parseInt(user[i].activity_points), true),
+								seasonal: functions.formatCount(parseInt(user[i].seasonal_points), true),
+								isVip: user[i].vip == '1' ? true : false,
+								canOpenAdminpan: user[i].rank >= config.get('cms_config').staffCheckHkMinimumRank ? true : false,
+							});
                         }
 
                         //add user ip in token for future security check
@@ -365,21 +366,21 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: i18n.__('invalidPin')
+                        message: 'Este código é inválido ou já expirou.'
                     });
                 }
             } else {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: i18n.__('requiredPin')
+                    message: 'Informe o código de confirmação.'
                 });
             }
         } catch (error) {
             return res.status(500).json({ error });
         }
     },
-
+	
     async recoverPassword(req, res) {
         try {
             const { email } = req.body;
@@ -388,13 +389,13 @@ module.exports = {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: i18n.__('recoveryPasswordNeedEmail')
+                    message: 'Informe o e-mail que utilizou na conta.'
                 });
             } else if (!functions.validateEmail(email)) {
                 return res.status(200).json({
                     error: true,
                     status_code: 400,
-                    message: i18n.__('recoveryPasswordValidEmail')
+                    message: 'Informe um e-mail válido.'
                 });
             } else {
                 const player = await PlayerModel.findOne(
@@ -415,7 +416,7 @@ module.exports = {
                             return res.status(200).json({
                                 error: true,
                                 status_code: 400,
-                                message: i18n.__('recoveryPasswordAwaiting')
+                                message: 'Espere 3 minutos antes de solicitar um novo link de redefinição de senha.'
                             });
                         } else {
                             let hash = crypto.createHash('sha1').update(JSON.stringify(Math.floor((Math.random() * 10) + 1))).digest('hex');
@@ -433,13 +434,13 @@ module.exports = {
 
                                 return res.status(200).json({
                                     status_code: 200,
-                                    message: i18n.__('recoveryPasswordSuccess', { email: email })
+                                    message: 'Se ' + email + ' for o e-mail utilizado na conta, um e-mail com um link de redefinição de senha acaba de ser enviado.',
                                 });
                             } else {
                                 return res.status(200).json({
                                     error: true,
                                     status_code: 400,
-                                    message: i18n.__('recoveryPasswordError')
+                                    message: 'Ocorreu um erro ao enviar o e-mail. Por favor contate um Staff.'
                                 });
                             }
                         }
@@ -448,13 +449,13 @@ module.exports = {
                     return res.status(200).json({
                         error: true,
                         status_code: 400,
-                        message: i18n.__('recoveryPasswordError')
+                        message: 'Ocorreu um erro ao enviar o e-mail. Por favor contate um Staff.'
                     });
                 }
             }
         } catch (error) {
             return res.status(500).json({ error });
         }
-    }
+    }	
 
 }

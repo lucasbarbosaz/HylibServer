@@ -24,8 +24,8 @@ module.exports = (req, res, next) => {
 
     jwt.verify(token, auth.jwt_secret_key, (err, decoded) => {
         if (err) return res.status(401).json({ error: 'Invalid token' });
-
-        //checking that the user's IP does not match the IP of the user making the request
+		
+		//checking that the user's IP does not match the IP of the user making the request
         //if yes, invalidate token
         if (decoded.ip !== requestIp.getClientIp(req)) return res.status(401).json({ error: 'Invalid token' });
 

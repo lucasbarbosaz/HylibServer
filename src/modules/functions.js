@@ -5,7 +5,7 @@ const sequelize = require('sequelize');
 const PlayerModel = require('../database/models/Player');
 const PlayerSettingsModel = require('../database/models/PlayerSettings');
 
-const COUNT_ABBRS = [ '', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
+const COUNT_ABBRS = [ '', 'K', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y' ];
 
 module.exports = {
     validName (username) {
@@ -34,16 +34,6 @@ module.exports = {
         );
     },
 
-    generateSSO(id) {
-        db.query("UPDATE players SET auth_ticket = ? WHERE id = ?", {
-            replacements: [ "SSO-" + parseInt(Math.floor(Math.random() * 391239132) + 1) + "", id ], type: sequelize.QueryTypes.UPDATE
-        })
-
-    },
-
-    getSSSO(userId) {
-        return PlayerModel.findOne({ where: { id: userId } });
-    },
 
 
     getUserIdFromToken(token) {
@@ -63,7 +53,6 @@ module.exports = {
 
          return stmt !== null ? stmt[key] : null;
     },
-
 
 					
     formatCount(count, withAbbr = false, decimals = 2) {

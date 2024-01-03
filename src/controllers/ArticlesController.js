@@ -18,7 +18,7 @@ module.exports = {
         try {
             var newsArr = [];
 
-            const getNews = await db.query("SELECT id,title,image,shortstory FROM cms_news WHERE rascunho != ? ORDER BY date DESC LIMIT 3", {
+            const getNews = await db.query("SELECT id,title,image,shortstory FROM cms_news WHERE rascunho != ? ORDER BY date DESC LIMIT 6", {
                 replacements: ['1'], type: sequelize.QueryTypes.SELECT
             });
 
@@ -305,6 +305,26 @@ module.exports = {
         }
     },
 
+    async getUsersLikedFromNewsId(req, res) {
+        try {
+            const { id } = req.query;
+
+            let usersLiked = [];
+
+            const getUsersLiked = await db.query("SELECT players.username,players.figure FROM cms_post_reaction INNER JOIN players ON cms_post_reaction.user_id=players.id WHERE cms_post_reaction.post_id = ? AND cms_post_reaction.type = ? AND cms_post_reaction.state = ?", {
+                replacements: [id, 'article', 'like'], type: sequelize.QueryTypes.SELECT
+            })
+
+            for (var i = 0; i < getUsersLiked.length; i++) {
+                usersLiked.push(getUsersLiked[i]);
+            }
+
+            return res.status(200).json(usersLiked);
+        } catch (error) {
+            return res.status(500).json({ error });
+        }
+    },
+
     async getLikesFromNewsId(req, res) {
         try {
             const { id } = req.query;
@@ -330,7 +350,7 @@ module.exports = {
 
     async sendLike(req, res) {
         try {
-            const { id } = req.body;
+            const { id, likeUrl } = req.body;
 
             var success = [];
 
@@ -360,28 +380,52 @@ module.exports = {
 
                     if (consultArticleLiked.length > 0) {
                         for (var i = 0; i < consultArticleLiked.length; i++) {
-                            if (consultArticleLiked[i].state == 'like') {
-                                const updateReaction = await db.query("UPDATE cms_post_reaction SET state = ? WHERE post_id = ? AND user_id = ? AND type = ?", {
-                                    replacements: ['undefined', id, user.id, 'article'], type: sequelize.QueryTypes.UPDATE
-                                });
 
-                                success.push({
-                                    response: "update",
-                                    status_code: 201
-                                });
+                            if (likeUrl == true) {
+                                if (consultArticleLiked[i].state == 'like') {
+                                    await db.query("UPDATE cms_post_reaction SET state = ? WHERE post_id = ? AND user_id = ? AND type = ?", {
+                                        replacements: ['like', id, user.id, 'article'], type: sequelize.QueryTypes.UPDATE
+                                    });
+
+                                    success.push({
+                                        response: "update",
+                                        status_code: 201
+                                    });
+                                } else {
+                                    await db.query("UPDATE cms_post_reaction SET state = ? WHERE post_id = ? AND user_id = ? AND type = ?", {
+                                        replacements: ['like', id, user.id, 'article'], type: sequelize.QueryTypes.UPDATE
+                                    });
+
+                                    success.push({
+                                        response: "like",
+                                        status_code: 200
+                                    });
+                                }
                             } else {
-                                const updateReaction = await db.query("UPDATE cms_post_reaction SET state = ? WHERE post_id = ? AND user_id = ? AND type = ?", {
-                                    replacements: ['like', id, user.id, 'article'], type: sequelize.QueryTypes.UPDATE
-                                });
+                                if (consultArticleLiked[i].state == 'like') {
+                                    await db.query("UPDATE cms_post_reaction SET state = ? WHERE post_id = ? AND user_id = ? AND type = ?", {
+                                        replacements: ['undefined', id, user.id, 'article'], type: sequelize.QueryTypes.UPDATE
+                                    });
 
-                                success.push({
-                                    response: "like",
-                                    status_code: 200
-                                });
+                                    success.push({
+                                        response: "update",
+                                        status_code: 201
+                                    });
+                                } else {
+                                    await db.query("UPDATE cms_post_reaction SET state = ? WHERE post_id = ? AND user_id = ? AND type = ?", {
+                                        replacements: ['like', id, user.id, 'article'], type: sequelize.QueryTypes.UPDATE
+                                    });
+
+                                    success.push({
+                                        response: "like",
+                                        status_code: 200
+                                    });
+                                }
                             }
+
                         }
                     } else {
-                        const sendReaction = await db.query("INSERT INTO cms_post_reaction (type, post_id, user_id, state) VALUES (?,?,?,?)", {
+                        await db.query("INSERT INTO cms_post_reaction (type, post_id, user_id, state) VALUES (?,?,?,?)", {
                             replacements: ['article', id, user.id, 'like'], type: sequelize.QueryTypes.UPDATE
                         });
 

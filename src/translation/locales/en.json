@@ -2,96 +2,17 @@
 	"playerNotFound": "This username does not exist or is empty!",
 	"playerWrong": "Incorrect username or password!",
 	"pinMessage": "Please wait 1 minute before logging in again.",
-	"pinSendEmail1": "Access code to your {{hotelName}} account",
+	"pinSendEmail1": "Access code for your account at {{hotelName}}",
 	"banPerman": "Your account has been permanently banned from Lella for the reason: {{reason}}",
 	"banMessage": "Your account has been banned until: <b>{{time}}</b> for the reason: {{reason}}",
 	"maintenance": "Oops, {{hotelName}} is currently under maintenance.",
 	"passwordResetTitle": "Password Reset",
-	"invalidPin": "This code is invalid or has already expired.",
-	"requiredPin": "Please enter the confirmation code.",
-
-
-
-	"checkNameInvalid": "Invalid username!",
-	"checkUserTaken": "Username already taken!",
-	"checkPrefixBlock": "The {{prefix}} prefix can only be used by STAFFS!",
-	"checkUserValid": "Valid username!",
-
-	"checkEmailRequired": "Enter an email.",
-	"checkEmailInvalid": "Enter a valid email.",
-	"checkEmailTaken": "This email is already in use.",
-	"checkEmailValid": "Valid email!",
-
-	"checkPasswordRequired": "Enter a password.",
-	"checkPasswordLength": "Password must be at least 6 characters.",
-	"checkPasswordValid": "Valid password!",
-
-
-
-	"registerUsernameRequired": "Username cannot be <b>empty</b>!",
-	"registerUsernameInvalid": "Invalid username. Only letters, numbers, periods, commas, underscores, and dashes are allowed.",
-	"registerInvalidName": "Invalid username. Must be <b>between 2 and 20 characters</b> long.",
-	"registerNameTaken": "The username <b>{{username}}</b> is already in use!",
-	"registerNamePrefix": "The prefix <b>{{prefix}}</b> can only be used by STAFFS!",
-	"registerEmailRequired": "You need <b>your email address</b>!",
-	"registerEmailInvalid": "The <b>email address</b> provided is <b>invalid</b>!",
-	"registerEmailTaken": "The <b>email address</b> provided is already in use!",
-	"registerPasswordRequired": "You need to provide a <b>secure password</b> for your account!",
-	"registerPasswordLength": "Your password must be <b>at least 6 characters long</b>.",
-	"registerGenderRequired": "<b>Choose your gender</b> and get an amazing partner!",
-	"registerCaptchaError": "<b>Verify that you're not a robot</b>!",
-
-
-
-
-	"recoveryPasswordNeedEmail": "Enter the email you used for your account.",
-	"recoveryPasswordValidEmail": "Enter a valid email.",
-	"recoveryPasswordAwaiting": "Please wait 3 minutes before requesting a new password reset link.",
-	"recoveryPasswordSuccess": "If {{email}} is the email used for the account, an email with a password reset link has just been sent.",
-	"recoveryPasswordError": "There was an error sending the email. Please contact a Staff.",
-
-
-
-	"recPasswordNotKeyFound": "We could not find any records with that authentication key.",
-
-
-
-	
-	"resetPasswordKeyNotFound": "The reset key was not provided.",
-	"resetPasswordPasswordNotFound": "You must provide a password.",
-	"resetPasswordLength": "For security reasons, the new password must contain at least 6 characters.",
-	"resetPasswordExpired": "This reset key has expired.",
-	"resetPasswordSuccess": "Your password has been successfully changed! You will be redirected...",
-	"resetPasswordPasswordDifferent": "The new passwords do not match.",
-
-	"dataProfileUserNotFound": "User not found.",
-	"dataProfileRequiredUser": "Please provide the user's name.",
-
-	"settingsMottoLength": "Your mission must have at most 70 characters.",
-	"settingsEmailInvalid": "Please provide a valid email address.",
-	"settingsEmailRequired": "Please provide an email address.",
-	"settingsPasswordLength": "Your new password must have at least 6 characters.",
-	"settingsPasswordWrong": "The current password provided is incorrect.",
-	"settingsPasswordSame": "The new passwords do not match.",
-	"settingsPasswordRepeat": "Please repeat your new password.",
-	"settingsPasswordNewRequired": "Please provide your new password.",
-	"settingsPasswordRequired": "Please provide your current password.",
-
-	"articlesSectionsToday": "Today",
-	"articlesSectionsYesterday": "Yesterday",
-	"articlesSectionsThisWeek": "This week",
-	"articlesSectionsLastWeek": "Last week",
-	"articlesSectionsThisMont": "This month",
-	"articlesSectionsLastMonth": "Last month",
-	"articlesSectionsOldest": "Oldest",
-
-	"getNewsInvalidSize": "The value of {{size}} must be an integer.",
-	"getNewsInvalidId": "Please provide a valid id number.",
-	"getNewsNotFound": "No news found with the provided id.",
-
-	"sendCommentWaiting": "You have to wait <b>10 minutes</b> to comment again.",
-	"sendCommentValueUndefined": "You need to write something to send the comment.",
-	"sendCommentLengthMax": "Your comment is too long.",
-	"sendCommentFilter": "Hmm, it seems we found a word from the blacklist in your comment."
-
+	"articlesSectionsToday": "Hoje",
+	"articlesSectionsYesterday": "Ontem",
+	"articlesSectionsThisWeek": "Essa semana",
+	"articlesSectionsLastWeek": "Última semana",
+	"articlesSectionsThisMont": "Esse mês",
+	"articlesSectionsLastMonth": "Último mês",
+	"articlesSectionsOldest": "Antigo",
+	"getNewsNotFound": "getNewsNotFound"
 }

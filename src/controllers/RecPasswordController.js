@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const db = require('../database');
 const moment = require('moment');
 const requestIp = require('request-ip');
-const PlayerModel = require('../database/models/Player');
 
 
 module.exports = {
@@ -68,7 +67,7 @@ module.exports = {
                 });
             } else {
                 if (password == passwordRepeat) {
-                    const getReset = await db.query("SELECT * FROM cms_reset_password WHERE reset_key = ?", {
+                    const getReset = await db.query("SELECT * FROM cms_reset_password WHERE reset_key = ? ORDER BY id DESC LIMIT 1", {
                         replacements: [ resetKey ], type: sequelize.QueryTypes.SELECT
                     })
 
@@ -91,11 +90,9 @@ module.exports = {
                                 const hash = bcrypt.genSaltSync();
                                 let passwordHashed = bcrypt.hashSync(password, hash);
     
-                                const updatePlayer = await PlayerModel.update({
-                                    password: passwordHashed
-                                }, {
-                                    where: { id: getReset[0].player_id }
-                                })
+                                const updatePlayer = await db.query("UPDATE players SET password = ? WHERE id = ?", {
+                                    replacements: [ passwordHashed, getReset[0].player_id ], type: sequelize.QueryTypes.UPDATE
+                                });
     
                                 return res.status(200).json({ 
                                     status_code: 200,

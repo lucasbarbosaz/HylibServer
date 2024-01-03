@@ -9,7 +9,6 @@ const moment = require('moment');
 const requestIp = require('request-ip');
 const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
-const i18n = require('../translation/i18n');
 
 const { verify } = require('hcaptcha');
 
@@ -33,37 +32,37 @@ module.exports = {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkNameInvalid')
+                    message: 'Nome de usuário inválido!' 
                 });
             } else if (!functions.validName(value)) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkNameInvalid')
+                    message: 'Nome de usuário inválido!' 
                 });
             } else if (typeof value == undefined || value === "" || value === null) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkNameInvalid')
+                    message: 'Nome de usuário inválido!' 
                 });
             } else if (userTaken !== null) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkUserTaken')
+                    message: 'Nome de usuário em uso!' 
                 });
             } else if (functions.strtolower(value.substr(0,4)) === "mod_" || functions.strtolower(value.substr(0,4)) === "mod-" || functions.strtolower(value.substr(0,3)) === "m0d" || functions.strtolower(value.substr(0,4)) === "adm-" || functions.strtolower(value.substr(0,4)) === "adm_" || functions.strtolower(value.substr(0,5)) === "radio" || functions.strtolower(value.substr(0,6)) === "radio-" || functions.strtolower(value.substr(0,6)) === "radio_" || functions.strtolower(value.substr(0,3)) === "ceo" || functions.strtolower(value.substr(0,3)) === "ce0" || functions.strtolower(value.substr(0,4)) === "ceo_" || functions.strtolower(value.substr(0,4)) === "ceo-") {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkPrefixBlock', { prefix: value.toUpperCase().substr(0,4)})
+                    message: 'O prefixo ' + value.toUpperCase().substr(0,4) + ' só pode ser utilizado por STAFFS!'
                 });    
             } else {
                 return res.status(200).json({
                     error: false, 
                     status_code: 200, 
-                    message: i18n.__('checkUserValid')
+                    message: 'Nome de usuário válido!' 
                 });
             }
         } else if (action == 'email') {
@@ -74,25 +73,25 @@ module.exports = {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkEmailRequired')
+                    message: 'Informe um e-mail.' 
                 }); 
             } else if (!functions.validateEmail(value)) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkEmailInvalid')
+                    message: 'Informe um e-mail válido.' 
                 }); 
             } else if (emailTaken !== null) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkEmailTaken')
+                    message: 'Este e-mail já está em uso.' 
                 });
             } else {
                 return res.status(200).json({
                     error: false, 
                     status_code: 200, 
-                    message: i18n.__('checkEmailValid')
+                    message: 'E-mail válido!' 
                 });
             }
         } else if (action == 'password') {
@@ -101,19 +100,19 @@ module.exports = {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkPasswordRequired') 
+                    message: 'Informe uma senha.' 
                 });
             } else if (value.length < 6) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('checkPasswordLength') 
+                    message: 'A senha deve ter no mínimo 6 caracteres.' 
                 });
             } else {
                 return res.status(200).json({
                     error: false, 
                     status_code: 200, 
-                    message: i18n.__('checkPasswordValid') 
+                    message: 'Senha válido!' 
                 });
             }
         }
@@ -133,67 +132,67 @@ module.exports = {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerUsernameRequired') 
+                    message: 'O nome de usuário não pode ficar <b>vázio</b>!' 
                 }); 
             } else if (!functions.preg_match(username, /^[\.\,a-zA-Z0-9_-]+$/i)) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerUsernameInvalid') 
+                    message: 'Nome de usuário inválido. Somente letras, números, pontos, vírgulas, underlines e traços são permitidos.' 
                 });
             } else if (!functions.validName(username)) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerInvalidName')
+                    message: 'Nome de usuário inválido. Deve ter no <b>mínimo 2 e no máximo 20 caracteres</b>.' 
                 }); 
             } else if (userTaken !== null) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerNameTaken', { username: username })
+                    message: 'O usuário <b> ' + username + '</b> já está sendo usado!' 
                 });            
             } else if (functions.strtolower(username.substr(0,4)) === "mod_" || functions.strtolower(username.substr(0,4)) === "mod-" || functions.strtolower(username.substr(0,3)) === "m0d" || functions.strtolower(username.substr(0,4)) === "adm-" || functions.strtolower(username.substr(0,4)) === "adm_" || functions.strtolower(username.substr(0,5)) === "radio" || functions.strtolower(username.substr(0,6)) === "radio-" || functions.strtolower(username.substr(0,6)) === "radio_" || functions.strtolower(username.substr(0,3)) === "ceo" || functions.strtolower(username.substr(0,3)) === "ce0" || functions.strtolower(username.substr(0,4)) === "ceo_" || functions.strtolower(username.substr(0,4)) === "ceo-") {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerNamePrefix', { prefix: username.toUpperCase().substr(0,4) })
+                    message: 'O prefixo <b>' + username.toUpperCase().substr(0,4) + '</b> só pode ser utilizado por STAFFS!'
                 });    
             } else if (email === null || email === '') {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerEmailRequired')
+                    message: 'Você precisa do <b>seu endereço de e-mail</b>!' 
                 }); 
             } else if (!functions.validateEmail(email)) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerEmailInvalid')
+                    message: 'O <b>endereço de e-mail</b> fornecido é <b>inválido</b>!' 
                 }); 
             } else if (emailTaken !== null) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerEmailTaken')
+                    message: 'O <b>endereço de e-mail</b> fornecido já está em uso!' 
                 });
             } else if (password === null || password === '') {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerPasswordRequired')
+                    message: 'Você precisa fornecer uma <b>senha segura</b> para sua conta!' 
                 });
             } else if (password.length < 6) {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerPasswordLength')
+                    message: 'Sua senha deve conter <b>no mínimo 6 caracteres </b>' 
                 });
             } else if (gender === null || gender === '') {
                 return res.status(200).json({
                     error: true, 
                     status_code: 400, 
-                    message: i18n.__('registerGenderRequired')
+                    message: '<b>Escolha o seu sexo</b> e, com ele, consiga um parceiro incrível!'
                 }); 
             } else {
                 const getTotalIp = await db.query("SELECT ip_last FROM players WHERE ip_last = ?", {
@@ -255,12 +254,13 @@ module.exports = {
 
                                 //add user ip in token for future security check
                                 const token = generateToken({ id: addNewUser.id, ip: requestIp.getClientIp(req) })
+								
                                 return res.status(200).json({ status_code: 200, token: token, user: userArray[0] });  
                             } else {
                                 return res.status(200).json({
                                     error: true, 
                                     status_code: 400, 
-                                    message: i18n.__('registerCaptchaError')
+                                    message: '<b>Verifique se você é um robô</b>!'
                                 });               
                             }
                         }
@@ -268,7 +268,7 @@ module.exports = {
                         return res.status(200).json({
                             error: true, 
                             status_code: 400, 
-                            message: i18n.__('registerCaptchaError')
+                            message: '<b>Verifique se você é um robô</b>!'
                         });  
                     }
                 }
