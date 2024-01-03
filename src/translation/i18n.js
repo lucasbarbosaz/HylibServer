@@ -5,7 +5,7 @@ const config = require('config');
 i18n.configure({
     locales: ['en', 'es', 'pt'],
     directory: path.join(__dirname, 'locales'),
-    defaultLocale: config.get('cms_config').defaultLanguage, //set you default language
+    defaultLocale: config.get('cms_config').defaultLanguage, 
     objectNotation: true
   });
 

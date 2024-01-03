@@ -15,7 +15,7 @@ module.exports = {
         try {
             const token = req.headers.authorization.split(' ')[1];
             const userId = functions.getUserIdFromToken(token);
-            const user = await PlayerModel.findAll({ where: { id: userId }, attributes: [ 'id', 'username', 'email', 'motto', 'rank', 'figure', 'last_online', 'online', 'vip_points', 'credits', 'activity_points', 'seasonal_points', 'vip' ] });
+            const user = await PlayerModel.findAll({ where: { id: userId }, attributes: ['id', 'username', 'email', 'motto', 'rank', 'figure', 'last_online', 'online', 'vip_points', 'credits', 'activity_points', 'seasonal_points', 'vip'] });
 
             var userArray = [];
             if (user) {
@@ -28,6 +28,7 @@ module.exports = {
                         figure: user[i].figure,
                         last_online: user[i].last_online,
                         online: user[i].online == '1',
+                        email: user[i].email,
                         diamonds: functions.formatCount(parseInt(user[i].vip_points), true),
                         credits: functions.formatCount(parseInt(user[i].credits), true),
                         duckets: functions.formatCount(parseInt(user[i].activity_points), true),
@@ -37,7 +38,7 @@ module.exports = {
                     })
                 }
 
-                return res.status(200).json({status_code: 200, user: userArray[0]});
+                return res.status(200).json({ status_code: 200, user: userArray[0] });
             }
 
         } catch (error) {
@@ -105,14 +106,14 @@ module.exports = {
 
             for (var i = 0; i < consultFeaturedGroups.length; i++) {
                 const count = await db.query("SELECT COUNT(DISTINCT group_memberships.id) AS count FROM group_memberships WHERE group_id = ?", {
-                    replacements: [ consultFeaturedGroups[i].group_id ], type: sequelize.QueryTypes.SELECT
+                    replacements: [consultFeaturedGroups[i].group_id], type: sequelize.QueryTypes.SELECT
                 })
 
                 for (var c = 0; c < count.length; c++) {
                     const consultFeaturedGroup = await db.query("SELECT * FROM groups WHERE id = ?", {
-                        replacements: [ consultFeaturedGroups[i].group_id ], type: sequelize.QueryTypes.SELECT
+                        replacements: [consultFeaturedGroups[i].group_id], type: sequelize.QueryTypes.SELECT
                     });
-    
+
                     for (var str = 0; str < consultFeaturedGroup.length; str++) {
                         groups.push({
                             badge: consultFeaturedGroup[str].badge,
@@ -124,7 +125,7 @@ module.exports = {
             }
 
             res.status(200).json(groups);
-                
+
 
         } catch (error) {
             return res.status(500).json({ error });
@@ -141,7 +142,7 @@ module.exports = {
 
             if (news.length > 0) {
                 const consultLastArticleSlide = await db.query("SELECT * FROM cms_news WHERE rascunho = ? ORDER BY date DESC LIMIT 3", {
-                    replacements: [ '0' ], type: sequelize.QueryTypes.SELECT
+                    replacements: ['0'], type: sequelize.QueryTypes.SELECT
                 });
 
                 for (var i = 0; i < consultLastArticleSlide.length; i++) {
@@ -160,7 +161,7 @@ module.exports = {
             var newArr = [];
 
             const news = await db.query("SELECT * FROM cms_news WHERE rascunho = ? ORDER BY date DESC LIMIT 3,5", {
-                replacements: [ '0' ], type: sequelize.QueryTypes.SELECT
+                replacements: ['0'], type: sequelize.QueryTypes.SELECT
             });
 
             if (news.length > 0) {
@@ -182,57 +183,118 @@ module.exports = {
             const id = functions.getUserIdFromToken(token);
 
             const updateSSO = db.query("UPDATE players SET auth_ticket = ? WHERE id = ?", {
-                replacements: [ sso, id ], type: sequelize.QueryTypes.UPDATE
+                replacements: [sso, id], type: sequelize.QueryTypes.UPDATE
             });
 
 
-            return res.status(200).json({id: id, authorized: id !== null ? true : false, sso});
+            return res.status(200).json({ id: id, authorized: id !== null ? true : false, sso });
         } catch (error) {
-            return res.status(500).json({ error }); 
+            return res.status(500).json({ error });
         }
     },
 
-    async getEvents(req, res) {
+    async getOnlineFriends(req, res) {
         try {
-            let events = [];
+            let array = [];
+            const token = req.headers.authorization.split(' ')[1];
+            const userId = functions.getUserIdFromToken(token);
 
-            const getEvent = await db.query("SELECT title,description,link,image FROM cms_events WHERE type = ? ORDER BY id DESC LIMIT 1", {
-                replacements: [ 'evento' ], type: sequelize.QueryTypes.SELECT
+            const query = await db.query("SELECT players.username FROM players INNER JOIN player_settings ON players.id=player_settings.player_id WHERE players.id IN (SELECT user_two_id FROM messenger_friendships WHERE user_one_id = ?) AND online = '1' AND player_settings.hide_online = '0' ORDER BY players.username", {
+                replacements: [parseInt(userId)], type: sequelize.QueryTypes.SELECT
             });
 
-            for (var i = 0; i < getEvent.length; i++) {
-                events.push({
-                    title: getEvent[i].title,
-                    description: getEvent[i].description,
-                    image: getEvent[i].image
-                });
+            for (var i = 0; i < query.length; i++) {
+                array.push(query[i]);
             }
 
-            return res.status(200).json(events);
+            return res.status(200).json(array);
+
         } catch (error) {
-            return res.status(500).json({ error }); 
+            return res.status(500).json({ error });
         }
     },
 
-    async getActivity(req, res) {
+    async getUsersOnline(req, res) {
         try {
-            let activitys = [];
-
-            const activity = await db.query("SELECT title,description,link,image FROM cms_events WHERE type = ? ORDER BY id DESC LIMIT 1", {
-                replacements: [ 'atividade' ], type: sequelize.QueryTypes.SELECT
+            const count = await db.query("SELECT active_players FROM server_status LIMIT 1", {
+                type: sequelize.QueryTypes.SELECT
             });
 
-            for (var i = 0; i < activity.length; i++) {
-                activitys.push({
-                    title: activity[i].title,
-                    description: activity[i].description,
-                    image: activity[i].image
-                });
-            }
+            let usersOnline = JSON.stringify(count[0].active_players + 23);
 
-            return res.status(200).json(activitys);
+            return res.status(200).json({ count: usersOnline });
+
         } catch (error) {
-            return res.status(500).json({ error }); 
+            return res.status(500).json({ error });
         }
     },
+
+	async getPhotos(req, res) {
+        try {
+
+            const { type } = req.query;
+
+            if (type == "client") {
+                var newArrPhotos = [];
+                const getPhotos = await db.query("SELECT player_photos.id, player_photos.player_id, players.username AS player_username, player_photos.room_id, rooms.name AS room_name,  player_photos.photo,player_photos.timestamp FROM player_photos INNER JOIN players ON players.id = player_photos.player_id INNER JOIN rooms ON rooms.id = player_photos.room_id WHERE players.vip='1' ORDER BY player_photos.id DESC LIMIT 6", {
+                    type: sequelize.QueryTypes.SELECT
+                });
+
+                for (var i = 0; i < getPhotos.length; i++) {
+
+                    newArrPhotos.push({
+                        username: getPhotos[i].player_username,
+                        image: getPhotos[i].photo,
+                    });
+                }
+
+                return res.status(200).json(newArrPhotos);
+            } else if (type == "usergallery") {
+                const { username } = req.query;
+
+                if (username && username.length > 0) {
+                    var newArrPhotos = [];
+
+                    const getPhotos = await db.query("SELECT player_photos.id, player_photos.player_id, players.username AS player_username, players.figure AS player_look, player_photos.room_id, rooms.name AS room_name,  player_photos.photo,player_photos.timestamp FROM player_photos INNER JOIN players ON players.id = player_photos.player_id INNER JOIN rooms ON rooms.id = player_photos.room_id WHERE players.username = ? ORDER BY player_photos.id DESC LIMIT 100", {
+                        type: sequelize.QueryTypes.SELECT, replacements: [username]
+                    });
+
+                    for (var i = 0; i < getPhotos.length; i++) {
+                        newArrPhotos.push({
+                            username: getPhotos[i].player_username,
+							figure: getPhotos[i].player_look,
+                            image: getPhotos[i].photo,
+                            room_name: getPhotos[i].room_name,
+							room_id: getPhotos[i].room_id,
+							date: getPhotos[i].timestamp
+                        })
+                    }
+
+                    return res.status(200).json(newArrPhotos);
+                } else {
+                    var newArrPhotos = [];
+
+                    const getPhotos = await db.query("SELECT player_photos.id, player_photos.player_id, players.username AS player_username, players.figure AS player_look, player_photos.room_id, rooms.name AS room_name,  player_photos.photo,player_photos.timestamp FROM player_photos INNER JOIN players ON players.id = player_photos.player_id INNER JOIN rooms ON rooms.id = player_photos.room_id ORDER BY player_photos.id DESC LIMIT 100", {
+                        type: sequelize.QueryTypes.SELECT
+                    });
+
+                    for (var i = 0; i < getPhotos.length; i++) {
+                        newArrPhotos.push({
+                            username: getPhotos[i].player_username,
+							figure: getPhotos[i].player_look,
+                            image: getPhotos[i].photo,
+                            room_name: getPhotos[i].room_name,
+							room_id: getPhotos[i].room_id,
+							date: getPhotos[i].timestamp
+                        })
+                    }
+
+                    return res.status(200).json(newArrPhotos);
+                }
+            }
+
+        } catch (error) {
+            return res.status(200).json(error);
+        }
+	}
 }

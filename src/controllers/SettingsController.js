@@ -9,6 +9,8 @@ const moment = require('moment');
 const requestIp = require('request-ip');
 const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
+const sanitizeHtml = require('sanitize-html');
+
 
 module.exports = {
     async updateUserSettings(req, res) {
@@ -220,5 +222,64 @@ module.exports = {
             return res.status(500).json({ error });
         }
     },
+	
+	async getUserSocialMedia(req,res) {
+        try {
+            const token = req.headers.authorization.split(' ')[1];
+            const userId = functions.getUserIdFromToken(token);
+            const user = await functions.getUserFromId(userId);
+
+            var array = [];
+
+            if (user) {
+                const getSocialMediaLinks = await db.query("SELECT instagram_link, imgur_link, vsco_link, twitter_link, link_link FROM player_settings WHERE player_id = ?", {
+                    replacements: [ userId ], type: sequelize.QueryTypes.SELECT
+                });
+
+                if (getSocialMediaLinks.length > 0) {
+                    for (var i = 0; i < getSocialMediaLinks.length; i++) {
+                        array.push({
+                            instagram: getSocialMediaLinks[i].instagram_link,
+                            imgur: getSocialMediaLinks[i].imgur_link,
+                            vsco: getSocialMediaLinks[i].vsco_link,
+                            twitter: getSocialMediaLinks[i].twitter_link,
+                            link: getSocialMediaLinks[i].link_link,
+                        });
+                    }
+                }
+
+                return res.status(200).json(array);
+            }
+        } catch (error) {
+            return res.status(500).json({ error });
+        }
+    },
+	
+	async updateUserSocialMedia(req, res) {
+        try {
+            const token = req.headers.authorization.split(' ')[1];
+            const userId = functions.getUserIdFromToken(token);
+            const user = await functions.getUserFromId(userId);
+
+            const { instagram, imgur, vsco, twitter, link } = req.body;
+
+            if (user) {
+                const instagramFiltred = sanitizeHtml(instagram);
+                const imgurFiltred = sanitizeHtml(imgur);
+                const vscoFiltred = sanitizeHtml(vsco);
+                const twitterFiltred = sanitizeHtml(twitter);
+                const linkFiltred = sanitizeHtml(link);
+
+                const updateSocialMedia = await db.query("UPDATE player_settings SET instagram_link = ?, imgur_link = ?, vsco_link = ?, twitter_link = ?, link_link = ? WHERE player_id = ?", {
+                    replacements: [ instagramFiltred, imgurFiltred, vscoFiltred, twitterFiltred, linkFiltred, userId ], type: sequelize.QueryTypes.UPDATE
+                });
+                
+                return res.status(200).json({ status_code: 200, message: "Links alterados"});
+            }
+
+        } catch (error) {
+            return res.status(500).json({ error });
+        }
+    }
 
 }

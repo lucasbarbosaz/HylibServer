@@ -7,6 +7,7 @@ const GroupMemberships = require('./models/GroupMemberships');
 const PlayerSettings = require('./models/PlayerSettings');
 const ResetPassword = require('./models/ResetPassword');
 const CmsLoginPin = require('./models/CmsLoginPin');
+const Shop = require('./models/Shop');
 
 const db = new Sequelize(dbConfig);
 
@@ -17,8 +18,8 @@ Articles.init(db);
 GroupMemberships.init(db);
 PlayerSettings.init(db);
 ResetPassword.init(db);
-
 Player.associate(db.models);
+Shop.init(db);
 
 db.authenticate().then(() => {
     console.log("Connection has been established sucessfully.");
