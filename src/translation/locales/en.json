@@ -14,5 +14,10 @@
 	"articlesSectionsThisMont": "Esse mês",
 	"articlesSectionsLastMonth": "Último mês",
 	"articlesSectionsOldest": "Antigo",
-	"getNewsNotFound": "getNewsNotFound"
+	"getNewsNotFound": "getNewsNotFound",
+	"formCheckLimit": "Submission limit reached",
+	"formSendSuccess": "Form submitted successfully! Thank you for participating!",
+	"formErrorUnknow": "Unknown error, please try again.",
+	"formParticipantsOrLinkRequired": "Participant or link is required to submit the form"
+
 }

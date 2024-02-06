@@ -220,7 +220,7 @@ module.exports = {
                 type: sequelize.QueryTypes.SELECT
             });
 
-            let usersOnline = JSON.stringify(count[0].active_players + 23);
+            let usersOnline = JSON.stringify(count[0].active_players);
 
             return res.status(200).json({ count: usersOnline });
 
