@@ -1,7 +1,6 @@
 const sequelize = require('sequelize');
 const auth = require('../config/auth.json');
 const bcrypt = require('bcryptjs');
-const PlayerModel = require('../database/models/Player');
 const config = require('config');
 const db = require('../database');
 const moment = require('moment');
@@ -10,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const functions = require('../modules/functions');
 const i18n = require('../translation/i18n');
 
-const ArticlesModel = require('../database/models/Articles');
+const FormArticleModal = require('../database/models/FormArticle');
 
 module.exports = {
 
@@ -592,6 +591,45 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ error });
         }
+    },
+
+    async sendForm(req, res) {
+      
+
+            var success = [];
+
+
+            const { articleId, userId, participants, link, message } = req.body;
+            const checkLimitForm = await FormArticleModal.findAndCountAll({ where: { article_id: articleId, user_id: userId } });
+
+            if (!participants || !link) {
+                return res.status(200).json({
+                    error: true,
+                    status_code: 400,
+                    message: i18n.__('formParticipantsOrLinkRequired')
+                });
+            } else if (checkLimitForm.count >= 3) {
+                return res.status(200).json({
+                    error: true,
+                    status_code: 400,
+                    message: i18n.__('formCheckLimit')
+                });
+            } else {
+                await FormArticleModal.create({ article_id: articleId, user_id: userId, usernames: participants, timestamp: moment().unix(), link: link, message: message })
+                    .then(() => {
+						return res.status(200).json({
+							status_code: 200,
+							message: i18n.__('formSendSuccess')
+						});	
+                    }).catch(() => {
+                        return res.status(200).json({
+                            error: true,
+                            status_code: 400,
+                            message: i18n.__('formErrorUnknow')
+                        });
+                    }).finally(() => {})
+            }
+         
     }
 
 }

@@ -13,9 +13,12 @@ const functions = require('../modules/functions');
 const { verify } = require('hcaptcha');
 
 function generateToken(params = {}) {
+    /*
     return jwt.sign(params, auth.jwt_secret_key, {
-        expiresIn: '1d' // 1day
-    });
+        expiresIn: '1d' // 1 dia
+    });*/
+
+    return jwt.sign(params, auth.jwt_secret_key); //never expire
 }
 
 

@@ -14,5 +14,9 @@
 	"articlesSectionsThisMont": "Esse mês",
 	"articlesSectionsLastMonth": "Último mês",
 	"articlesSectionsOldest": "Antigo",
-	"getNewsNotFound": "getNewsNotFound"
+	"getNewsNotFound": "getNewsNotFound",
+	"formParticipantsOrLinkRequired": "O participante ou o link é obrigatório para enviar o formulário",
+	"formCheckLimit": "Limite de envios antigidos",
+	"formSendSuccess": "Formulário enviado com sucesso! Obrigado por participar!",
+	"formErrorUnknow": "Erro desconhecido, tente novamente."
 }
